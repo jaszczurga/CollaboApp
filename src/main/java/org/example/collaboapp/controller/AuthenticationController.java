@@ -2,13 +2,11 @@ package org.example.collaboapp.controller;
 
 
 import lombok.RequiredArgsConstructor;
-import org.example.collaboapp.dto.AuthenticationRequest;
-import org.example.collaboapp.dto.AuthenticationResponse;
-import org.example.collaboapp.dto.RegisterRequest;
+import org.example.collaboapp.dto.Authentication.AuthenticationRequest;
+import org.example.collaboapp.dto.Authentication.AuthenticationResponse;
+import org.example.collaboapp.dto.Authentication.RegisterRequest;
 import org.example.collaboapp.service.AuthenticationService;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

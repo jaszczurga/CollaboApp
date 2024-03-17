@@ -1,9 +1,11 @@
 package org.example.collaboapp.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.collaboapp.dto.AuthenticationRequest;
-import org.example.collaboapp.dto.AuthenticationResponse;
-import org.example.collaboapp.dto.RegisterRequest;
+import org.example.collaboapp.dto.Authentication.AuthenticationRequest;
+import org.example.collaboapp.dto.Authentication.AuthenticationResponse;
+import org.example.collaboapp.dto.Authentication.RegisterRequest;
+import org.example.collaboapp.exception.ConflictException;
+import org.example.collaboapp.exception.NotFoundException;
 import org.example.collaboapp.model.User;
 import org.example.collaboapp.repository.RoleRepository;
 import org.example.collaboapp.repository.UserRepository;
@@ -26,10 +28,10 @@ public class AuthenticationService {
     private final RoleRepository roleRepository;
     public AuthenticationResponse register(RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already in use");
+            throw new ConflictException( "User with this email already exists" );
         }
         var userRole = roleRepository.findByName("USER")
-                .orElseThrow(() -> new RuntimeException("User Role not found"));
+                .orElseThrow(() -> new NotFoundException("Role not found during registration process"));
 
         var user = User.builder()
                 .firstName(request.getFirstName())
@@ -54,7 +56,7 @@ public class AuthenticationService {
                 )
         );
         var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException( "user not found by his email" ) );
         var jwtToken = jwtService.generateToken(user);
         return  AuthenticationResponse
                 .builder()

@@ -1,6 +1,7 @@
 package org.example.collaboapp.configuration;
 
 import lombok.RequiredArgsConstructor;
+import org.example.collaboapp.exception.NotFoundException;
 import org.example.collaboapp.model.Role;
 import org.example.collaboapp.model.User;
 import org.example.collaboapp.repository.RoleRepository;
@@ -58,7 +59,7 @@ CommandLineRunner initDatabase(RoleRepository roleRepository, UserRepository use
             .build();
     userRepository.save(admin); // Save the admin user before adding it to the role
 
-    Role adminRole = roleRepository.findByName("ADMIN").orElseThrow(() -> new RuntimeException("Role not found"));
+    Role adminRole = roleRepository.findByName("ADMIN").orElseThrow(() -> new NotFoundException( "Admin role" ) );
     adminRole.addUsers(admin);
     admin.setRoles(new HashSet<>(List.of(roleRepository.save(adminRole))));
 }

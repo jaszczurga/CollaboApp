@@ -1,4 +1,4 @@
-package org.example.collaboapp.dto;
+package org.example.collaboapp.dto.Authentication;
 
 
 import lombok.AllArgsConstructor;
