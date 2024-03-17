@@ -60,7 +60,7 @@ public class AuthenticationServiceTests {
 
     //JUnit test for register method
         @Test
-        @DisplayName( "Test for register method")
+        @DisplayName( "Test for register method valid credentials return token" )
         public void givenRegisterRequestObject_whenRegister_thenReturnAuthenticationResponseWithToken(){
             //given - precoditions for the test
             RegisterRequest request = new RegisterRequest();
@@ -82,7 +82,8 @@ public class AuthenticationServiceTests {
         }
 
     @Test
-    public void testAuthenticate() {
+    @DisplayName( "Test for authenticate method valid credentials returns token")
+    public void givenAuthenticateObject_whenAuthenticate_thenReturnAuthenticationResponseWithToken() {
         AuthenticationRequest request = new AuthenticationRequest();
         request.setEmail("test@test.com");
         request.setPassword("password");

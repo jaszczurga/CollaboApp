@@ -32,12 +32,12 @@ public class User implements UserDetails {
 
     @NotBlank
     @Size(max = 50)
-    @Column(name="first_name", unique = true, nullable = false)
+    @Column(name="first_name")
     private String firstName;
 
     @NotBlank
     @Size(max = 50)
-    @Column(unique = true, nullable = false)
+    @Column(name="last_name")
     private String lastName;
 
     @NotBlank
@@ -71,29 +71,36 @@ public class User implements UserDetails {
                 .collect( Collectors.toList() );
     }
 
+
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
     @Override
     public String getUsername() {
-        return this.email;
+        return email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 
 }

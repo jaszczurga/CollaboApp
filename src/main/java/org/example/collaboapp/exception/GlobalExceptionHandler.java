@@ -24,5 +24,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(InvalidLoginAttempt.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidLoginAttempt(InvalidLoginAttempt e, WebRequest request){
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                request.getDescription(false),
+                HttpStatus.UNAUTHORIZED,
+                e.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.UNAUTHORIZED);
+    }
+
 
 }

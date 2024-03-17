@@ -5,12 +5,14 @@ import org.example.collaboapp.dto.Authentication.AuthenticationRequest;
 import org.example.collaboapp.dto.Authentication.AuthenticationResponse;
 import org.example.collaboapp.dto.Authentication.RegisterRequest;
 import org.example.collaboapp.exception.ConflictException;
+import org.example.collaboapp.exception.InvalidLoginAttempt;
 import org.example.collaboapp.exception.NotFoundException;
 import org.example.collaboapp.model.User;
 import org.example.collaboapp.repository.RoleRepository;
 import org.example.collaboapp.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -49,12 +51,16 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+        } catch (AuthenticationException e) {
+            throw new InvalidLoginAttempt("Invalid login attempt");
+        }
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new NotFoundException( "user not found by his email" ) );
         var jwtToken = jwtService.generateToken(user);
