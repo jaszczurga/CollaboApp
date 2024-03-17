@@ -26,13 +26,19 @@ import java.util.stream.Collectors;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id", updatable = false, nullable = false)
+    private Long userId;
+
+    @NotBlank
+    @Size(max = 50)
+    @Column(name="first_name", unique = true, nullable = false)
+    private String firstName;
 
     @NotBlank
     @Size(max = 50)
     @Column(unique = true, nullable = false)
-    private String username;
+    private String lastName;
 
     @NotBlank
     @Size(max = 100)
@@ -51,9 +57,9 @@ public class User implements UserDetails {
 
     @ManyToMany
     @JoinTable(
-            name = "role",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "id")
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
 
@@ -63,6 +69,11 @@ public class User implements UserDetails {
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect( Collectors.toList() );
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
     }
 
     @Override
