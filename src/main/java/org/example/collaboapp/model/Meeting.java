@@ -1,9 +1,9 @@
 package org.example.collaboapp.model;
+
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
-
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -11,25 +11,25 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "tasks")
-public class Task extends BaseModel{
+@Table(name = "meetings")
+public class Meeting extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int taskId;
-
-    @Column(name = "project_id", nullable = false)
-    private int projectId;
+    private int id;
 
     @Column(nullable = false)
     private String title;
 
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    @Column(name = "team_id")
+    private int teamId;
 
-    @ManyToOne
-    @JoinColumn(name = "assignee_id")
-    private User user;
+    @Column(name = "start_datetime")
+    private Date startDatetime;
+
+    @Column(name = "end_datetime")
+    private Date endDatetime;
+
 }

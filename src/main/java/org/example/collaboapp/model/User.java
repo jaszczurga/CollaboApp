@@ -63,6 +63,18 @@ public class User implements UserDetails {
     )
     private Set<Role> roles;
 
+    @ManyToMany
+    @JoinTable(
+            name = "user_projects",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id")
+    )
+    private Set<Project> projects;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Task> tasks;
+
+
     ////////////security methods////////////
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

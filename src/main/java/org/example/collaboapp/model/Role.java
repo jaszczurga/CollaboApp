@@ -12,12 +12,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "roles")
-public class Role {
+public class Role{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
