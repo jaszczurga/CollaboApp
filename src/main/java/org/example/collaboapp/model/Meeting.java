@@ -2,6 +2,7 @@ package org.example.collaboapp.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.collaboapp.model.utils.BaseModel;
 
 import java.util.Date;
 

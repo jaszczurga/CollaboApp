@@ -1,4 +1,4 @@
-package org.example.collaboapp.model;
+package org.example.collaboapp.model.utils;
 
 
 import jakarta.persistence.*;

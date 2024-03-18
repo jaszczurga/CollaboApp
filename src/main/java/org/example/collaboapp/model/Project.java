@@ -2,8 +2,9 @@ package org.example.collaboapp.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.collaboapp.model.utils.BaseModel;
 
-import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -14,7 +15,7 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "projects")
-public class Project extends BaseModel{
+public class Project extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,12 +36,12 @@ public class Project extends BaseModel{
             joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<User> users;
+    private Set<User> users= new HashSet<>();
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private Set<Task> tasks;
+    private Set<Task> tasks = new HashSet<>();
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private Set<Meeting> meetings;
+    private Set<Meeting> meetings = new HashSet<>();
 
 }

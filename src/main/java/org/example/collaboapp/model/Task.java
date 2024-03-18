@@ -1,8 +1,8 @@
 package org.example.collaboapp.model;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.Date;
+import org.example.collaboapp.model.utils.BaseModel;
+import org.example.collaboapp.model.utils.Status;
 
 
 @Data
@@ -12,7 +12,7 @@ import java.util.Date;
 @Builder
 @Entity
 @Table(name = "tasks")
-public class Task extends BaseModel{
+public class Task extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

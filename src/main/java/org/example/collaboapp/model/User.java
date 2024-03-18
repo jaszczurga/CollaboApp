@@ -61,7 +61,7 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -69,10 +69,10 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "project_id")
     )
-    private Set<Project> projects;
+    private Set<Project> projects = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    private Set<Task> tasks;
+    private Set<Task> tasks = new HashSet<>();
 
 
     ////////////security methods////////////
