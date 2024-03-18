@@ -27,8 +27,10 @@ public class Project extends BaseModel {
 
     private String description;
 
-    @Column(name = "manager_id")
-    private int managerId;
+
+    @OneToOne
+    @JoinColumn(name = "manager_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    private User manager;
 
     @ManyToMany
     @JoinTable(
@@ -38,10 +40,10 @@ public class Project extends BaseModel {
     )
     private Set<User> users= new HashSet<>();
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "projectId", cascade = CascadeType.ALL)
     private Set<Task> tasks = new HashSet<>();
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "projectId", cascade = CascadeType.ALL)
     private Set<Meeting> meetings = new HashSet<>();
 
 }
