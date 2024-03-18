@@ -49,15 +49,15 @@ CREATE TABLE IF NOT EXISTS user_projects (
                                              FOREIGN KEY (project_id) REFERENCES projects(project_id)
 );
 
--- Team Table: Represents teams within the organization
-CREATE TABLE IF NOT EXISTS team (
-                                    team_id INT PRIMARY KEY AUTO_INCREMENT,
-                                    name VARCHAR(100) NOT NULL,
-                                    description TEXT,
-                                    manager_id INT, -- ID of the user who manages the team
-                                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                    FOREIGN KEY (manager_id) REFERENCES users(user_id)
-);
+# -- Team Table: Represents teams within the organization
+# CREATE TABLE IF NOT EXISTS team (
+#                                     team_id INT PRIMARY KEY AUTO_INCREMENT,
+#                                     name VARCHAR(100) NOT NULL,
+#                                     description TEXT,
+#                                     manager_id INT, -- ID of the user who manages the team
+#                                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+#                                     FOREIGN KEY (manager_id) REFERENCES users(user_id)
+# );
 
 -- Task Table: Represents tasks within projects
 CREATE TABLE IF NOT EXISTS tasks (
@@ -77,9 +77,9 @@ CREATE TABLE IF NOT EXISTS meetings (
                                         meeting_id INT PRIMARY KEY AUTO_INCREMENT,
                                         title VARCHAR(100) NOT NULL,
                                         description TEXT,
-                                        team_id INT, -- ID of the team associated with the meeting
+                                        project_id INT, -- ID of the team associated with the meeting
                                         start_datetime DATETIME,
                                         end_datetime DATETIME,
                                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                        FOREIGN KEY (team_id) REFERENCES team(team_id)
+                                        FOREIGN KEY (project_id) REFERENCES projects(project_id)
 );

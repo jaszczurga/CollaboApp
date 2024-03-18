@@ -37,4 +37,10 @@ public class Project extends BaseModel{
     )
     private Set<User> users;
 
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private Set<Task> tasks;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private Set<Meeting> meetings;
+
 }

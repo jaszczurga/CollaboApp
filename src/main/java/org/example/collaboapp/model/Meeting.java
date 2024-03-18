@@ -23,13 +23,17 @@ public class Meeting extends BaseModel {
 
     private String description;
 
-    @Column(name = "team_id")
-    private int teamId;
+    @Column(name = "project_id")
+    private int projectId;
 
     @Column(name = "start_datetime")
     private Date startDatetime;
 
     @Column(name = "end_datetime")
     private Date endDatetime;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id", insertable = false, updatable = false)
+    private Project project;
 
 }

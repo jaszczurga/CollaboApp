@@ -32,4 +32,8 @@ public class Task extends BaseModel{
     @ManyToOne
     @JoinColumn(name = "assignee_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id", insertable = false, updatable = false)
+    private Project project;
 }
