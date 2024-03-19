@@ -28,7 +28,8 @@ public class SecurityConfiguration {
                         .requestMatchers( "/api/v1/auth/**","/**" )
                         .permitAll()
                         .anyRequest()
-                        .authenticated())
+                        .authenticated()
+                )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy( SessionCreationPolicy.STATELESS ))
                 .authenticationProvider( authenticationProvider )
