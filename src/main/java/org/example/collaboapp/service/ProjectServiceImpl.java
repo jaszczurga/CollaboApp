@@ -35,6 +35,25 @@ public class ProjectServiceImpl implements ProjectService{
         return entityMapper.projectToProjectResponseDto(savedProject);
     }
 
+    //all updated connected to adding user to project tasks project manager and meeting TODO
+    @Override
+    public ProjectResponseDto updateProject(int id , ProjectRequestDto projectRequestDto) {
+        Project project = projectRepository.findById((long)id)
+                .orElseThrow(() -> new NotFoundException( "project not found with given id" ) );
+        project.setTitle(projectRequestDto.getTitle());
+        project.setDescription(projectRequestDto.getDescription());
+        Project updatedProject = projectRepository.save(project);
+        return entityMapper.projectToProjectResponseDto(updatedProject);
+    }
+
+    @Override
+    public ProjectResponseDto deleteProject(int id) {
+        Project project = projectRepository.findById((long)id)
+                .orElseThrow(() -> new NotFoundException( "project not found with given id" ) );
+        projectRepository.delete(project);
+        return entityMapper.projectToProjectResponseDto(project);
+    }
+
     @Override
     public List<ProjectResponseDto> getAllProjects(int page , int size) {
 
