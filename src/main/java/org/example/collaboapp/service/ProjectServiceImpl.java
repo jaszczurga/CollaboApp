@@ -3,6 +3,7 @@ package org.example.collaboapp.service;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import org.example.collaboapp.controller.ProjectController;
+import org.example.collaboapp.controller.TaskController;
 import org.example.collaboapp.dto.Mapper.EntityMapper;
 import org.example.collaboapp.dto.ProjectRequestDto;
 import org.example.collaboapp.dto.ProjectResponseDto;
@@ -63,7 +64,8 @@ public class ProjectServiceImpl implements ProjectService{
                 .map( entityMapper::projectToProjectResponseDto )
                 .peek(projectResponseDto -> {
                     Link selfLink = linkTo(methodOn( ProjectController.class).getProject(projectResponseDto.getProjectId())).withSelfRel();
-                    projectResponseDto.add(selfLink);
+                    Link tasksLink = linkTo(methodOn( TaskController.class).getTasks(projectResponseDto.getProjectId())).withRel("tasks");
+                    projectResponseDto.add(selfLink, tasksLink);
                 })
                 .toList();
 
