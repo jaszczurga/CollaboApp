@@ -52,16 +52,25 @@ public class TaskServiceImpl implements TaskService{
         Task task = taskRepository.findById((long)id)
                 .orElseThrow(() -> new RuntimeException("task not found with given id"));
         Link selfLink = linkTo(methodOn( TaskController.class).getTask(task.getProjectId(),task.getTaskId())).withSelfRel();
-        return entityMapper.taskToTaskResponseDto(task).add(selfLink);
+        Link deleteLink = linkTo(methodOn( TaskController.class).deleteTask(task.getProjectId(),task.getTaskId())).withRel("delete").withTitle("Endpoint for deleting task");
+        return entityMapper.taskToTaskResponseDto(task).add(selfLink,deleteLink);
     }
 
     @Override
     public TaskResponseDto updateTask(int id , TaskRequestDto taskRequestDto) {
-        return null;
+        Task task = taskRepository.findById((long)id)
+                .orElseThrow(() -> new RuntimeException("task not found with given id"));
+        task.setTitle(taskRequestDto.getTitle());
+        task.setDescription(taskRequestDto.getDescription());
+        Task updatedTask = taskRepository.save(task);
+        return entityMapper.taskToTaskResponseDto(updatedTask);
     }
 
     @Override
     public TaskResponseDto deleteTask(int id) {
-        return null;
+        Task task = taskRepository.findById((long)id)
+                .orElseThrow(() -> new RuntimeException("task not found with given id"));
+        taskRepository.delete(task);
+        return entityMapper.taskToTaskResponseDto(task);
     }
 }

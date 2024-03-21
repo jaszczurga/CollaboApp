@@ -76,6 +76,8 @@ public class ProjectServiceImpl implements ProjectService{
     public ProjectResponseDto getProjectById(int id) {
         Project project = projectRepository.findById((long)id)
                 .orElseThrow(() -> new NotFoundException( "project not found with given id" ) );
-        return entityMapper.projectToProjectResponseDto(project);
+        Link selfLink = linkTo(methodOn( ProjectController.class).getProject(project.getProjectId())).withSelfRel();
+        Link tasksLink = linkTo(methodOn( TaskController.class).getTasks(project.getProjectId(),0,100)).withRel("tasks");
+        return entityMapper.projectToProjectResponseDto(project).add(selfLink, tasksLink);
     }
 }
