@@ -45,6 +45,7 @@ public class EntityMapper {
                 .description(task.getDescription())
                 .projectId(task.getProjectId())
                 .status(task.getStatus().name())
+                .assignee(task.getUser())
                 .build();
     }
 

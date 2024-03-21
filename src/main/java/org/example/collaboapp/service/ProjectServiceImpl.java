@@ -64,8 +64,12 @@ public class ProjectServiceImpl implements ProjectService{
                 .map( entityMapper::projectToProjectResponseDto )
                 .peek(projectResponseDto -> {
                     Link selfLink = linkTo(methodOn( ProjectController.class).getProject(projectResponseDto.getProjectId())).withSelfRel();
-                    Link tasksLink = linkTo(methodOn( TaskController.class).getTasks(projectResponseDto.getProjectId(),0,100)).withRel("tasks");
-                    projectResponseDto.add(selfLink, tasksLink);
+//                    Link tasksLink = linkTo(methodOn( TaskController.class).getTasks(projectResponseDto.getProjectId(),0,100)).withRel("tasks");
+//                    //link for deleting project
+//                    Link deleteLink = linkTo(methodOn( ProjectController.class).deleteProject(projectResponseDto.getProjectId())).withRel("delete").withTitle("Endpoint for deleting project");
+//                    //link for updating project
+//                    Link updateLink = linkTo(methodOn( ProjectController.class).updateProject(projectResponseDto.getProjectId(),new ProjectRequestDto())).withRel("update").withTitle("Endpoint for updating project");
+                    projectResponseDto.add(selfLink);
                 })
                 .toList();
 
@@ -78,6 +82,10 @@ public class ProjectServiceImpl implements ProjectService{
                 .orElseThrow(() -> new NotFoundException( "project not found with given id" ) );
         Link selfLink = linkTo(methodOn( ProjectController.class).getProject(project.getProjectId())).withSelfRel();
         Link tasksLink = linkTo(methodOn( TaskController.class).getTasks(project.getProjectId(),0,100)).withRel("tasks");
-        return entityMapper.projectToProjectResponseDto(project).add(selfLink, tasksLink);
+        //link for deleting project
+        Link deleteLink = linkTo(methodOn( ProjectController.class).deleteProject(project.getProjectId())).withRel("delete").withTitle("Endpoint for deleting project");
+        //link for updating project
+        Link updateLink = linkTo(methodOn( ProjectController.class).updateProject(project.getProjectId(),new ProjectRequestDto())).withRel("update").withTitle("Endpoint for updating project");
+        return entityMapper.projectToProjectResponseDto(project).add(selfLink, tasksLink, deleteLink, updateLink);
     }
 }

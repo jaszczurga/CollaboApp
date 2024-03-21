@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import org.example.collaboapp.dto.Mapper.EntityMapper;
 import org.example.collaboapp.dto.TaskRequestDto;
 import org.example.collaboapp.dto.TaskResponseDto;
+import org.example.collaboapp.model.User;
+import org.example.collaboapp.repository.UserRepository;
 import org.example.collaboapp.service.TaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ public class TaskController {
 
     private final TaskService taskService;
     private final EntityMapper entityMapper;
+    private final UserRepository userRepository;
 
     @GetMapping("/tasks")
     public ResponseEntity<List<TaskResponseDto>> getTasks(@PathVariable int id,
@@ -41,7 +44,7 @@ public class TaskController {
     }
 
     @PutMapping("/updateTask/{taskId}")
-    public ResponseEntity<TaskResponseDto> updateTask(@PathVariable int taskId, @RequestBody TaskRequestDto taskRequestDto) {
+    public ResponseEntity<TaskResponseDto> updateTask(@PathVariable int id, @PathVariable int taskId, @RequestBody TaskRequestDto taskRequestDto) {
         return ResponseEntity.ok(taskService.updateTask(taskId, taskRequestDto));
     }
 
@@ -49,5 +52,11 @@ public class TaskController {
     public ResponseEntity<TaskResponseDto> deleteTask(@PathVariable int id,@PathVariable int taskId) {
         return ResponseEntity.ok(taskService.deleteTask(taskId));
     }
+
+    @PutMapping("/assignUserToTask/{taskId}")
+    public ResponseEntity<TaskResponseDto> assignUserToTask(@PathVariable int id, @PathVariable int taskId,@RequestParam(required = true) int userId) {
+        return ResponseEntity.ok(taskService.assignUserToTask(taskId, userId));
+    }
+
 
 }

@@ -18,4 +18,8 @@ public interface TaskService {
 
     TaskResponseDto deleteTask(int id);
 
+    TaskResponseDto assignUserToTask(int id, int userId);
+
+
+
 }
