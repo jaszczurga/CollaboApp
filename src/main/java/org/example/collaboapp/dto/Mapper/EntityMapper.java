@@ -1,11 +1,13 @@
 package org.example.collaboapp.dto.Mapper;
 
+import org.example.collaboapp.dto.Authentication.UserResponseDto;
 import org.example.collaboapp.dto.ProjectRequestDto;
 import org.example.collaboapp.dto.ProjectResponseDto;
 import org.example.collaboapp.dto.TaskRequestDto;
 import org.example.collaboapp.dto.TaskResponseDto;
 import org.example.collaboapp.model.Project;
 import org.example.collaboapp.model.Task;
+import org.example.collaboapp.model.User;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -45,7 +47,17 @@ public class EntityMapper {
                 .description(task.getDescription())
                 .projectId(task.getProjectId())
                 .status(task.getStatus().name())
-                .assignee(task.getUser())
+                .assignee(task.getUser() != null ? userToUserResponseDto(task.getUser()) : null)
+                .build();
+    }
+
+    public UserResponseDto userToUserResponseDto(User user) {
+        return UserResponseDto.builder()
+                .userId(user.getUserId())
+                .firstName( user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .role(user.getRoles())
                 .build();
     }
 

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.collaboapp.dto.Authentication.UserResponseDto;
 import org.example.collaboapp.model.User;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -19,5 +20,5 @@ public class TaskResponseDto extends RepresentationModel<TaskResponseDto> {
     private String status;
     private int projectId;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private User assignee;
+    private UserResponseDto assignee;
 }

@@ -2,6 +2,7 @@ package org.example.collaboapp.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
+import org.example.collaboapp.dto.Authentication.UserResponseDto;
 import org.example.collaboapp.model.User;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -14,5 +15,5 @@ public class ProjectResponseDto extends RepresentationModel<ProjectResponseDto> 
     String title;
     String description;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    User manager;
+    UserResponseDto manager;
 }

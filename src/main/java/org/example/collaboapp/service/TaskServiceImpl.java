@@ -86,7 +86,7 @@ public class TaskServiceImpl implements TaskService{
                 .orElseThrow(() -> new RuntimeException("user not found with given id")));
         Task updatedTask = taskRepository.save(task);
         TaskResponseDto taskResponseDto = entityMapper.taskToTaskResponseDto(updatedTask);
-        taskResponseDto.setAssignee( updatedTask.getUser());
+        taskResponseDto.setAssignee( entityMapper.userToUserResponseDto(updatedTask.getUser()));
         return  taskResponseDto;
     }
 
