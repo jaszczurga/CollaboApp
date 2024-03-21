@@ -64,7 +64,7 @@ public class ProjectServiceImpl implements ProjectService{
                 .map( entityMapper::projectToProjectResponseDto )
                 .peek(projectResponseDto -> {
                     Link selfLink = linkTo(methodOn( ProjectController.class).getProject(projectResponseDto.getProjectId())).withSelfRel();
-                    Link tasksLink = linkTo(methodOn( TaskController.class).getTasks(projectResponseDto.getProjectId())).withRel("tasks");
+                    Link tasksLink = linkTo(methodOn( TaskController.class).getTasks(projectResponseDto.getProjectId(),0,100)).withRel("tasks");
                     projectResponseDto.add(selfLink, tasksLink);
                 })
                 .toList();
