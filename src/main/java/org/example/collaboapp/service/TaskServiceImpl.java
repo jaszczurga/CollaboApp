@@ -46,7 +46,7 @@ public class TaskServiceImpl implements TaskService{
 
         Pageable pageable = PageRequest.of(page, size);
         List<Task> tasks = taskRepository.findAll(pageable).getContent();
-        tasks.stream()
+        List resultTasks =  tasks.stream()
                 .map(entityMapper::taskToTaskResponseDto)
                 .peek(taskResponseDto -> {
                     Link selfLink = linkTo(methodOn( TaskController.class).getTask(taskResponseDto.getProjectId(),taskResponseDto.getTaskId())).withSelfRel();
@@ -54,7 +54,7 @@ public class TaskServiceImpl implements TaskService{
                 })
                 .toList();
         ListResponseDto listResponseDto = new ListResponseDto();
-        listResponseDto.setContent(tasks);
+        listResponseDto.setContent(resultTasks);
         Link selfLink = linkTo(methodOn( TaskController.class).getTasks(tasks.getFirst().getProjectId(),0,100)).withSelfRel();
         Link addTask = linkTo(methodOn( TaskController.class).saveTask(tasks.getFirst().getProjectId(),null)).withRel("addTask").withTitle("Endpoint for adding task");
         listResponseDto.add(selfLink,addTask);
