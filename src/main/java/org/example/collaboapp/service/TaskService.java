@@ -1,5 +1,6 @@
 package org.example.collaboapp.service;
 
+import org.example.collaboapp.dto.ListResponseDto;
 import org.example.collaboapp.dto.TaskRequestDto;
 import org.example.collaboapp.dto.TaskResponseDto;
 import org.example.collaboapp.model.Task;
@@ -10,7 +11,7 @@ public interface TaskService {
 
     TaskResponseDto saveTask(TaskRequestDto taskRequestDto);
 
-    List<TaskResponseDto> getAllTasks(int page, int size);
+    ListResponseDto getAllTasks(int page, int size);
 
     TaskResponseDto getTaskById(int id);
 

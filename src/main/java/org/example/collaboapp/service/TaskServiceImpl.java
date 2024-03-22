@@ -3,6 +3,7 @@ package org.example.collaboapp.service;
 import lombok.AllArgsConstructor;
 import org.example.collaboapp.controller.ProjectController;
 import org.example.collaboapp.controller.TaskController;
+import org.example.collaboapp.dto.ListResponseDto;
 import org.example.collaboapp.dto.Mapper.EntityMapper;
 import org.example.collaboapp.dto.TaskRequestDto;
 import org.example.collaboapp.dto.TaskResponseDto;
@@ -41,17 +42,23 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public List<TaskResponseDto> getAllTasks(int page , int size) {
+    public ListResponseDto getAllTasks(int page , int size) {
 
         Pageable pageable = PageRequest.of(page, size);
         List<Task> tasks = taskRepository.findAll(pageable).getContent();
-        return tasks.stream()
+        tasks.stream()
                 .map(entityMapper::taskToTaskResponseDto)
                 .peek(taskResponseDto -> {
                     Link selfLink = linkTo(methodOn( TaskController.class).getTask(taskResponseDto.getProjectId(),taskResponseDto.getTaskId())).withSelfRel();
                     taskResponseDto.add(selfLink);
                 })
                 .toList();
+        ListResponseDto listResponseDto = new ListResponseDto();
+        listResponseDto.setContent(tasks);
+        Link selfLink = linkTo(methodOn( TaskController.class).getTasks(tasks.getFirst().getProjectId(),0,100)).withSelfRel();
+        Link addTask = linkTo(methodOn( TaskController.class).saveTask(tasks.getFirst().getProjectId(),null)).withRel("addTask").withTitle("Endpoint for adding task");
+        listResponseDto.add(selfLink,addTask);
+        return listResponseDto;
     }
 
     @Override

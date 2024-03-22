@@ -1,5 +1,6 @@
 package org.example.collaboapp.service;
 
+import org.example.collaboapp.dto.ListResponseDto;
 import org.example.collaboapp.dto.ProjectRequestDto;
 import org.example.collaboapp.dto.ProjectResponseDto;
 
@@ -13,7 +14,7 @@ public interface ProjectService {
 
     ProjectResponseDto deleteProject(int id);
 
-    List<ProjectResponseDto> getAllProjects(int page, int size);
+    ListResponseDto getAllProjects(int page, int size);
 
     ProjectResponseDto getProjectById(int id);
 

@@ -26,7 +26,7 @@ public class TaskController {
     private final UserRepository userRepository;
 
     @GetMapping("/tasks")
-    public ResponseEntity<List<TaskResponseDto>> getTasks(@PathVariable int id,
+    public ResponseEntity<?> getTasks(@PathVariable int id,
                                                           @RequestParam(defaultValue = "0",required = false) int page,
                                                           @RequestParam(defaultValue = "100",required = false) int size) {
         return ResponseEntity.ok(taskService.getAllTasks(page, size));

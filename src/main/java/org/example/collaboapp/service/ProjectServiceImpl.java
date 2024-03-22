@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Setter;
 import org.example.collaboapp.controller.ProjectController;
 import org.example.collaboapp.controller.TaskController;
+import org.example.collaboapp.dto.ListResponseDto;
 import org.example.collaboapp.dto.Mapper.EntityMapper;
 import org.example.collaboapp.dto.ProjectRequestDto;
 import org.example.collaboapp.dto.ProjectResponseDto;
@@ -59,7 +60,7 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
-    public List<ProjectResponseDto> getAllProjects(int page , int size) {
+    public ListResponseDto getAllProjects(int page , int size) {
 
         Pageable pageable = PageRequest.of(page, size);
         List<Project> projects = projectRepository.findAll(pageable).getContent();
@@ -73,10 +74,17 @@ public class ProjectServiceImpl implements ProjectService{
 //                    //link for updating project
 //                    Link updateLink = linkTo(methodOn( ProjectController.class).updateProject(projectResponseDto.getProjectId(),new ProjectRequestDto())).withRel("update").withTitle("Endpoint for updating project");
                     projectResponseDto.add(selfLink);
+                    projectResponseDto.setUsers( null );
                 })
                 .toList();
+        ListResponseDto listResponseDto = new ListResponseDto();
+        Link selfLink = linkTo(methodOn( ProjectController.class).getAllProjects(0,100)).withSelfRel();
+        Link addProject = linkTo(methodOn( ProjectController.class).saveProject(null)).withRel("addProject").withTitle("Endpoint for adding project");
+        listResponseDto.setContent( projectResponseDtoList );
+        listResponseDto.add(selfLink, addProject);
 
-        return projectResponseDtoList;
+        //return projectResponseDtoList;
+        return listResponseDto;
     }
 
     @Override
@@ -89,9 +97,9 @@ public class ProjectServiceImpl implements ProjectService{
         Link deleteLink = linkTo(methodOn( ProjectController.class).deleteProject(project.getProjectId())).withRel("delete").withTitle("Endpoint for deleting project");
         //link for updating project
         Link updateLink = linkTo(methodOn( ProjectController.class).updateProject(project.getProjectId(),new ProjectRequestDto())).withRel("update").withTitle("Endpoint for updating project");
-        Link addTask = linkTo(methodOn( TaskController.class).saveTask(project.getProjectId(),null)).withRel("addTask").withTitle("Endpoint for adding task to project");
+        //Link addTask = linkTo(methodOn( TaskController.class).saveTask(project.getProjectId(),null)).withRel("addTask").withTitle("Endpoint for adding task to project");
         Link assignUser = linkTo(methodOn( ProjectController.class).assignUserToProject(project.getProjectId(),0)).withRel("assignUser").withTitle("Endpoint for assigning user to project");
-        return entityMapper.projectToProjectResponseDto(project).add(selfLink, deleteLink, updateLink,assignUser, tasksLink, addTask);
+        return entityMapper.projectToProjectResponseDto(project).add(selfLink, deleteLink, updateLink,assignUser, tasksLink);
     }
 
     @Override
