@@ -9,7 +9,9 @@ import org.example.collaboapp.dto.ProjectRequestDto;
 import org.example.collaboapp.dto.ProjectResponseDto;
 import org.example.collaboapp.exception.NotFoundException;
 import org.example.collaboapp.model.Project;
+import org.example.collaboapp.model.User;
 import org.example.collaboapp.repository.ProjectRepository;
+import org.example.collaboapp.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Link;
@@ -27,6 +29,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class ProjectServiceImpl implements ProjectService{
 
     private final ProjectRepository projectRepository;
+    private final UserRepository userRepository;
     private final EntityMapper entityMapper;
 
     @Override
@@ -86,6 +89,20 @@ public class ProjectServiceImpl implements ProjectService{
         Link deleteLink = linkTo(methodOn( ProjectController.class).deleteProject(project.getProjectId())).withRel("delete").withTitle("Endpoint for deleting project");
         //link for updating project
         Link updateLink = linkTo(methodOn( ProjectController.class).updateProject(project.getProjectId(),new ProjectRequestDto())).withRel("update").withTitle("Endpoint for updating project");
-        return entityMapper.projectToProjectResponseDto(project).add(selfLink, tasksLink, deleteLink, updateLink);
+        Link addTask = linkTo(methodOn( TaskController.class).saveTask(project.getProjectId(),null)).withRel("addTask").withTitle("Endpoint for adding task to project");
+        Link assignUser = linkTo(methodOn( ProjectController.class).assignUserToProject(project.getProjectId(),0)).withRel("assignUser").withTitle("Endpoint for assigning user to project");
+        return entityMapper.projectToProjectResponseDto(project).add(selfLink, deleteLink, updateLink,assignUser, tasksLink, addTask);
+    }
+
+    @Override
+    public ProjectResponseDto assignUserToProject(int id , int userId) {
+
+        Project project = projectRepository.findById((long)id)
+                .orElseThrow(() -> new NotFoundException( "project not found with given id" ) );
+        User user = userRepository.findById((long)userId)
+                .orElseThrow(() -> new NotFoundException( "user not found with given id" ) );
+        project.addUser( user );
+        Project updatedProject = projectRepository.save(project);
+        return entityMapper.projectToProjectResponseDto(updatedProject);
     }
 }

@@ -10,6 +10,8 @@ import org.example.collaboapp.model.Task;
 import org.example.collaboapp.model.User;
 import org.springframework.stereotype.Component;
 
+import java.util.stream.Collectors;
+
 @Component
 public class EntityMapper {
 
@@ -19,6 +21,8 @@ public class EntityMapper {
                 .projectId(project.getProjectId())
                 .title(project.getTitle())
                 .description(project.getDescription())
+                .manager(project.getManager() != null ? userToUserResponseDto(project.getManager()) : null)
+                .users(project.getUsers() != null ? project.getUsers().stream().map(this::userToUserResponseDto).collect( Collectors.toSet()) : null)
                 .build();
     }
 

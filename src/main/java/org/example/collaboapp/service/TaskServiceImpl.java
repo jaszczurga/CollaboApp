@@ -6,8 +6,12 @@ import org.example.collaboapp.controller.TaskController;
 import org.example.collaboapp.dto.Mapper.EntityMapper;
 import org.example.collaboapp.dto.TaskRequestDto;
 import org.example.collaboapp.dto.TaskResponseDto;
+import org.example.collaboapp.exception.NotAllowedException;
+import org.example.collaboapp.exception.NotFoundException;
+import org.example.collaboapp.model.Project;
 import org.example.collaboapp.model.Task;
 import org.example.collaboapp.model.utils.Status;
+import org.example.collaboapp.repository.ProjectRepository;
 import org.example.collaboapp.repository.TaskRepository;
 import org.example.collaboapp.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +31,7 @@ public class TaskServiceImpl implements TaskService{
     private final TaskRepository taskRepository;
     private final EntityMapper entityMapper;
     private final UserRepository userRepository;
+    private final ProjectRepository projectRepository;
     @Override
     public TaskResponseDto saveTask(TaskRequestDto taskRequestDto) {
         Task task = entityMapper.taskRequestDtoToTask(taskRequestDto);
@@ -52,7 +57,7 @@ public class TaskServiceImpl implements TaskService{
     @Override
     public TaskResponseDto getTaskById(int id) {
         Task task = taskRepository.findById((long)id)
-                .orElseThrow(() -> new RuntimeException("task not found with given id"));
+                .orElseThrow(() -> new NotFoundException("task not found with given id"));
         Link selfLink = linkTo(methodOn( TaskController.class).getTask(task.getProjectId(),task.getTaskId())).withSelfRel();
         Link deleteLink = linkTo(methodOn( TaskController.class).deleteTask(task.getProjectId(),task.getTaskId())).withRel("delete").withTitle("Endpoint for deleting task");
         Link updateLink = linkTo(methodOn( TaskController.class).updateTask(task.getProjectId(),task.getTaskId(),null)).withRel("update").withTitle("Endpoint for updating task necessary filelds title and description");
@@ -63,7 +68,7 @@ public class TaskServiceImpl implements TaskService{
     @Override
     public TaskResponseDto updateTask(int id , TaskRequestDto taskRequestDto) {
         Task task = taskRepository.findById((long)id)
-                .orElseThrow(() -> new RuntimeException("task not found with given id"));
+                .orElseThrow(() -> new NotFoundException("task not found with given id"));
         task.setTitle(taskRequestDto.getTitle());
         task.setDescription(taskRequestDto.getDescription());
         Task updatedTask = taskRepository.save(task);
@@ -73,7 +78,7 @@ public class TaskServiceImpl implements TaskService{
     @Override
     public TaskResponseDto deleteTask(int id) {
         Task task = taskRepository.findById((long)id)
-                .orElseThrow(() -> new RuntimeException("task not found with given id"));
+                .orElseThrow(() -> new NotFoundException("task not found with given id"));
         taskRepository.delete(task);
         return entityMapper.taskToTaskResponseDto(task);
     }
@@ -81,9 +86,16 @@ public class TaskServiceImpl implements TaskService{
     @Override
     public TaskResponseDto assignUserToTask(int id , int userId) {
         Task task = taskRepository.findById((long)id)
-                .orElseThrow(() -> new RuntimeException("task not found with given id"));
+                .orElseThrow(() -> new NotFoundException("task not found with given id"));
         task.setUser( userRepository.findById((long)userId)
-                .orElseThrow(() -> new RuntimeException("user not found with given id")));
+                .orElseThrow(() -> new NotFoundException("user not found with given id")));
+        Project project = projectRepository.findById((long)task.getProjectId())
+                .orElseThrow(() -> new NotFoundException("project not found with given id"));
+
+        if(project.getUsers().stream().noneMatch(user -> user.getUserId() == userId)){
+            throw new NotAllowedException("user not assigned to project");
+        }
+
         Task updatedTask = taskRepository.save(task);
         TaskResponseDto taskResponseDto = entityMapper.taskToTaskResponseDto(updatedTask);
         taskResponseDto.setAssignee( entityMapper.userToUserResponseDto(updatedTask.getUser()));

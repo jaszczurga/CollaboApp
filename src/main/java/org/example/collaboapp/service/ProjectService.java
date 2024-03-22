@@ -17,5 +17,7 @@ public interface ProjectService {
 
     ProjectResponseDto getProjectById(int id);
 
+    ProjectResponseDto assignUserToProject(int id, int userId);
+
 
 }

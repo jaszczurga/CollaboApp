@@ -35,5 +35,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponseDto, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(NotAllowedException.class)
+    public ResponseEntity<ErrorResponseDto> handleNotAllowedException(NotAllowedException e, WebRequest request){
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                request.getDescription(false),
+                HttpStatus.METHOD_NOT_ALLOWED,
+                e.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
 
 }

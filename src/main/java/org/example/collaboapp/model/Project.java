@@ -46,4 +46,8 @@ public class Project extends BaseModel {
     @OneToMany(mappedBy = "projectId", cascade = CascadeType.ALL)
     private Set<Meeting> meetings = new HashSet<>();
 
+    public void addUser(User user) {
+        users.add(user);
+    }
+
 }
