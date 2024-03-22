@@ -1,5 +1,6 @@
 package org.example.collaboapp.service;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import org.example.collaboapp.controller.ProjectController;
@@ -52,6 +53,7 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
+    @Transactional
     public ProjectResponseDto deleteProject(int id) {
         Project project = projectRepository.findById((long)id)
                 .orElseThrow(() -> new NotFoundException( "project not found with given id" ) );

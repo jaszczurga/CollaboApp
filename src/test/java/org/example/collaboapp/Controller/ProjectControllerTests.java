@@ -76,7 +76,7 @@ public class ProjectControllerTests {
         given(projectService.createProject(any(ProjectRequestDto.class))).willReturn(projectResponseDto);
 
         //when
-        ResultActions result = mockMvc.perform(post("/api/projectController/saveProject")
+        ResultActions result = mockMvc.perform(post("/api/saveProject")
                 .contentType( MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(projectRequestDto)));
 
@@ -96,7 +96,7 @@ public class ProjectControllerTests {
         given(projectService.updateProject(1, projectRequestDto)).willReturn(projectResponseDto);
 
         //when
-        ResultActions result = mockMvc.perform(put("/api/projectController/updateProject/1")
+        ResultActions result = mockMvc.perform(put("/api/updateProject/1")
                 .contentType( MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(projectRequestDto)));
 
@@ -116,7 +116,7 @@ public class ProjectControllerTests {
         given(projectService.deleteProject(1)).willReturn(projectResponseDto);
 
         //when
-        ResultActions result = mockMvc.perform(delete("/api/projectController/deleteProject/1")
+        ResultActions result = mockMvc.perform(delete("/api/deleteProject/1")
                 .contentType( MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(projectRequestDto)));
 
@@ -136,7 +136,7 @@ public class ProjectControllerTests {
         given(projectService.getProjectById(1)).willReturn(projectResponseDto);
 
         //when
-        ResultActions result = mockMvc.perform(get("/api/projectController/projects/1")
+        ResultActions result = mockMvc.perform(get("/api/projects/1")
                 .contentType( MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(projectRequestDto)));
 

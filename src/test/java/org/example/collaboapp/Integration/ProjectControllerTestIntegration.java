@@ -75,7 +75,7 @@ public class ProjectControllerTestIntegration extends AbstractContainerBasedTest
     @DisplayName( "Test for saving a project")
     public void givenProjectRequestDto_whenSaveProject_thenReturnProjectResponseDtoObject() throws Exception {
 
-        ResultActions response = mockMvc.perform(post( "/api/projectController/saveProject" )
+        ResultActions response = mockMvc.perform(post( "/api/saveProject" )
                 .contentType( MediaType.APPLICATION_JSON )
                 .content( objectMapper.writeValueAsString( projectRequestDto ) )
         );
@@ -99,7 +99,7 @@ public class ProjectControllerTestIntegration extends AbstractContainerBasedTest
 
         //save a project
         Project project = projectRepository.save( entityMapper.projectRequestDtoToProject( projectRequestDto ) );
-        ResultActions response = mockMvc.perform(put( "/api/projectController/updateProject/"+project.getProjectId() )
+        ResultActions response = mockMvc.perform(put( "/api/updateProject/"+project.getProjectId() )
                 .contentType( MediaType.APPLICATION_JSON )
                 .content( objectMapper.writeValueAsString( projectRequestDtoUpdated ) )
         );
@@ -118,7 +118,7 @@ public class ProjectControllerTestIntegration extends AbstractContainerBasedTest
 
         //save a project
         Project project = projectRepository.save( entityMapper.projectRequestDtoToProject( projectRequestDto ) );
-        ResultActions response = mockMvc.perform(delete( "/api/projectController/deleteProject/"+project.getProjectId() )
+        ResultActions response = mockMvc.perform(delete( "/api/deleteProject/"+project.getProjectId() )
                 .contentType( MediaType.APPLICATION_JSON )
                 .content( objectMapper.writeValueAsString( projectRequestDto ) )
         );
@@ -148,7 +148,7 @@ public class ProjectControllerTestIntegration extends AbstractContainerBasedTest
         projectRepository.saveAll(projects);
 
         //when - action or the behavior to be tested
-        ResultActions response = mockMvc.perform(get( "/api/projectController/projects" ));
+        ResultActions response = mockMvc.perform(get( "/api/projects" ));
 
         //then - the expected result
         response.andDo( MockMvcResultHandlers.print() )
@@ -169,7 +169,7 @@ public class ProjectControllerTestIntegration extends AbstractContainerBasedTest
         Project project = projectRepository.save( entityMapper.projectRequestDtoToProject( projectRequestDto ) );
 
         //when
-        ResultActions result = mockMvc.perform(get( "/api/projectController/projects/"+project.getProjectId() )
+        ResultActions result = mockMvc.perform(get( "/api/projects/"+project.getProjectId() )
                 .contentType( MediaType.APPLICATION_JSON)
                 .content( objectMapper.writeValueAsString( projectRequestDto )));
 
