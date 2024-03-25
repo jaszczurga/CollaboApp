@@ -28,8 +28,8 @@ public class Project extends BaseModel {
     private String description;
 
 
-    @OneToOne
-    @JoinColumn(name = "manager_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    @ManyToOne
+    @JoinColumn(name = "manager_id", referencedColumnName = "user_id")
     private User manager;
 
     @ManyToMany

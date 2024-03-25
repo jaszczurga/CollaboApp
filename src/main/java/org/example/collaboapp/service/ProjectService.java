@@ -22,5 +22,7 @@ public interface ProjectService {
 
     ProjectResponseDto removeUserFromProject(int id, int userId);
 
+    ProjectResponseDto assignProjectManager(int id, int userId);
+
 
 }

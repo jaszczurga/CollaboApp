@@ -47,8 +47,8 @@ public class ProjectServiceImpl implements ProjectService{
     public ProjectResponseDto updateProject(int id , ProjectRequestDto projectRequestDto) {
         Project project = projectRepository.findById((long)id)
                 .orElseThrow(() -> new NotFoundException( "project not found with given id" ) );
-        project.setTitle(projectRequestDto.getTitle());
-        project.setDescription(projectRequestDto.getDescription());
+        project.setTitle(projectRequestDto.getTitle() != null ? projectRequestDto.getTitle() : project.getTitle());
+        project.setDescription(projectRequestDto.getDescription() != null ? projectRequestDto.getDescription() : project.getDescription());
         Project updatedProject = projectRepository.save(project);
         return entityMapper.projectToProjectResponseDto(updatedProject);
     }
@@ -98,7 +98,8 @@ public class ProjectServiceImpl implements ProjectService{
         //Link addTask = linkTo(methodOn( TaskController.class).saveTask(project.getProjectId(),null)).withRel("addTask").withTitle("Endpoint for adding task to project");
         Link assignUser = linkTo(methodOn( ProjectController.class).assignUserToProject(project.getProjectId(),0)).withRel("assignUser").withTitle("Endpoint for assigning user to project");
         Link removeUser = linkTo(methodOn( ProjectController.class).removeUserFromProject(project.getProjectId(),0)).withRel("removeUser").withTitle("Endpoint for removing user from project");
-        return entityMapper.projectToProjectResponseDto(project).add(selfLink, deleteLink, updateLink,assignUser,removeUser, tasksLink);
+        Link assignProjectManager = linkTo(methodOn( ProjectController.class).assignProjectManager(project.getProjectId(),0)).withRel("assignProjectManager").withTitle("Endpoint for assigning project manager 0 => remove manager and leaves null");
+        return entityMapper.projectToProjectResponseDto(project).add(selfLink, deleteLink, updateLink,assignUser,removeUser, tasksLink, assignProjectManager);
     }
 
     @Override
@@ -123,6 +124,26 @@ public class ProjectServiceImpl implements ProjectService{
                 .stream()
                 .filter( u -> !Objects.equals( u.getUserId() , user.getUserId() ) )
                 .collect(Collectors.toSet()));
+        Project updatedProject = projectRepository.save(project);
+        return entityMapper.projectToProjectResponseDto(updatedProject);
+    }
+
+    @Override
+    public ProjectResponseDto assignProjectManager(int id , int userId) {
+        //if userId is 0 then remove the manager from project and leave empty
+        if(userId == 0){
+            Project project = projectRepository.findById((long)id)
+                    .orElseThrow(() -> new NotFoundException( "project not found with given id" ) );
+            project.setManager( null );
+            Project updatedProject = projectRepository.save(project);
+            return entityMapper.projectToProjectResponseDto(updatedProject);
+        }
+
+        Project project = projectRepository.findById((long)id)
+                .orElseThrow(() -> new NotFoundException( "project not found with given id" ) );
+        User user = userRepository.findById((long)userId)
+                .orElseThrow(() -> new NotFoundException( "user not found with given id" ) );
+        project.setManager( user );
         Project updatedProject = projectRepository.save(project);
         return entityMapper.projectToProjectResponseDto(updatedProject);
     }
