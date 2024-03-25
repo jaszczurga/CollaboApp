@@ -58,5 +58,10 @@ public class TaskController {
         return ResponseEntity.ok(taskService.assignUserToTask(taskId, userId));
     }
 
+    @PutMapping("/removeUserFromTask/{taskId}")
+    public ResponseEntity<TaskResponseDto> removeUserFromTask(@PathVariable int id, @PathVariable int taskId,@RequestParam(required = true) int userId) {
+        return ResponseEntity.ok(taskService.removeUserFromTask(taskId, userId));
+    }
+
 
 }

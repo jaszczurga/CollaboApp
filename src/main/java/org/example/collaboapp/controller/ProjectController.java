@@ -51,4 +51,9 @@ public class ProjectController {
         return ResponseEntity.ok(projectService.assignUserToProject(id, userId));
     }
 
+    @PutMapping("/removeUserFromProject/{id}")
+    public ResponseEntity<ProjectResponseDto> removeUserFromProject(@PathVariable int id, @RequestParam(required = true) int userId) {
+        return ResponseEntity.ok(projectService.removeUserFromProject(id, userId));
+    }
+
 }

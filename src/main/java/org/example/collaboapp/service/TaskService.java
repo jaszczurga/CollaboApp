@@ -21,6 +21,8 @@ public interface TaskService {
 
     TaskResponseDto assignUserToTask(int id, int userId);
 
+    TaskResponseDto removeUserFromTask(int id, int userId);
+
 
 
 }

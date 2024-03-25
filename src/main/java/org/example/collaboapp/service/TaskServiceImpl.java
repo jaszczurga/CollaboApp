@@ -69,7 +69,8 @@ public class TaskServiceImpl implements TaskService{
         Link deleteLink = linkTo(methodOn( TaskController.class).deleteTask(task.getProjectId(),task.getTaskId())).withRel("delete").withTitle("Endpoint for deleting task");
         Link updateLink = linkTo(methodOn( TaskController.class).updateTask(task.getProjectId(),task.getTaskId(),null)).withRel("update").withTitle("Endpoint for updating task necessary filelds title and description");
         Link assignUserLink = linkTo(methodOn( TaskController.class).assignUserToTask(task.getProjectId(),task.getTaskId(),0)).withRel("assignUser").withTitle("Endpoint for assigning user to task");
-        return entityMapper.taskToTaskResponseDto(task).add(selfLink,deleteLink,updateLink,assignUserLink);
+        Link removeUserLink = linkTo(methodOn( TaskController.class).removeUserFromTask(task.getProjectId(),task.getTaskId(),0)).withRel("removeUser").withTitle("Endpoint for removing user from task");
+        return entityMapper.taskToTaskResponseDto(task).add(selfLink,deleteLink,updateLink,assignUserLink,removeUserLink);
     }
 
     @Override
@@ -107,6 +108,17 @@ public class TaskServiceImpl implements TaskService{
         TaskResponseDto taskResponseDto = entityMapper.taskToTaskResponseDto(updatedTask);
         taskResponseDto.setAssignee( entityMapper.userToUserResponseDto(updatedTask.getUser()));
         return  taskResponseDto;
+    }
+
+    @Override
+    public TaskResponseDto removeUserFromTask(int id , int userId) {
+        Task task = taskRepository.findById((long)id)
+                .orElseThrow(() -> new NotFoundException("task not found with given id"));
+        task.setUser(null);
+        Task updatedTask = taskRepository.save(task);
+        TaskResponseDto taskResponseDto = entityMapper.taskToTaskResponseDto(updatedTask);
+        taskResponseDto.setAssignee(null);
+        return taskResponseDto;
     }
 
 
