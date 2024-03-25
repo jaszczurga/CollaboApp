@@ -78,8 +78,8 @@ public class TaskServiceImpl implements TaskService{
     public TaskResponseDto updateTask(int id , TaskRequestDto taskRequestDto) {
         Task task = taskRepository.findById((long)id)
                 .orElseThrow(() -> new NotFoundException("task not found with given id"));
-        task.setTitle(taskRequestDto.getTitle());
-        task.setDescription(taskRequestDto.getDescription());
+        task.setTitle(taskRequestDto.getTitle() != null ? taskRequestDto.getTitle() : task.getTitle());
+        task.setDescription(taskRequestDto.getDescription() != null ? taskRequestDto.getDescription() : task.getDescription());
         Task updatedTask = taskRepository.save(task);
         return entityMapper.taskToTaskResponseDto(updatedTask);
     }
