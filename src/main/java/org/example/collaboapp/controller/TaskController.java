@@ -63,5 +63,10 @@ public class TaskController {
         return ResponseEntity.ok(taskService.removeUserFromTask(taskId, userId));
     }
 
+    @PutMapping("/changeTaskStatus/{taskId}")
+    public ResponseEntity<TaskResponseDto> changeTaskStatus(@PathVariable int id, @PathVariable int taskId,@RequestParam(required = true) int statusState) {
+        return ResponseEntity.ok(taskService.changeTaskStatus(taskId, statusState));
+    }
+
 
 }

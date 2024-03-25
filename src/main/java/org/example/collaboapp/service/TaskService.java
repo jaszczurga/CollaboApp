@@ -23,6 +23,8 @@ public interface TaskService {
 
     TaskResponseDto removeUserFromTask(int id, int userId);
 
+    TaskResponseDto changeTaskStatus(int id, int statusState);
+
 
 
 }

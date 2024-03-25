@@ -70,7 +70,8 @@ public class TaskServiceImpl implements TaskService{
         Link updateLink = linkTo(methodOn( TaskController.class).updateTask(task.getProjectId(),task.getTaskId(),null)).withRel("update").withTitle("Endpoint for updating task necessary filelds title and description");
         Link assignUserLink = linkTo(methodOn( TaskController.class).assignUserToTask(task.getProjectId(),task.getTaskId(),0)).withRel("assignUser").withTitle("Endpoint for assigning user to task");
         Link removeUserLink = linkTo(methodOn( TaskController.class).removeUserFromTask(task.getProjectId(),task.getTaskId(),0)).withRel("removeUser").withTitle("Endpoint for removing user from task");
-        return entityMapper.taskToTaskResponseDto(task).add(selfLink,deleteLink,updateLink,assignUserLink,removeUserLink);
+        Link changeStatusLink = linkTo(methodOn( TaskController.class).changeTaskStatus(task.getProjectId(),task.getTaskId(),0)).withRel("changeStatus").withTitle("Endpoint for changing task status 0 => _TODO, 1 => IN_PROGRESS, 2 => DONE");
+        return entityMapper.taskToTaskResponseDto(task).add(selfLink,deleteLink,updateLink,assignUserLink,removeUserLink,changeStatusLink);
     }
 
     @Override
@@ -119,6 +120,16 @@ public class TaskServiceImpl implements TaskService{
         TaskResponseDto taskResponseDto = entityMapper.taskToTaskResponseDto(updatedTask);
         taskResponseDto.setAssignee(null);
         return taskResponseDto;
+    }
+
+    @Override
+    public TaskResponseDto changeTaskStatus(int id , int statusState) {
+        Task task = taskRepository.findById((long)id)
+                .orElseThrow(() -> new NotFoundException("task not found with given id"));
+        //0 => _TODO, 1 => IN_PROGRESS, 2 => DONE
+        task.setStatus(Status.values()[statusState]);
+        Task updatedTask = taskRepository.save(task);
+        return entityMapper.taskToTaskResponseDto(updatedTask);
     }
 
 
