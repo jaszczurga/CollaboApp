@@ -17,6 +17,7 @@ import org.example.collaboapp.repository.TaskRepository;
 import org.example.collaboapp.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Service;
 
@@ -62,8 +63,11 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public ListResponseDto getTasksByProjectId(int projectId , int page , int size , Integer status) {
-        Pageable pageable = PageRequest.of(page, size);
+    public ListResponseDto getTasksByProjectId(int projectId , int page , int size , Integer status,String sort, Integer desc) {
+
+        Sort.Direction direction = desc != null && desc == 1 ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Sort sortValue = sort != null ? Sort.by(direction,sort) : Sort.by(direction,"taskId");
+        Pageable pageable = PageRequest.of(page, size,sortValue);
 
         //filtering of statuses 0 => _TODO, 1 => IN_PROGRESS, 2 => DONE
         Status statusValue = status != null ? Status.values()[status] : null;

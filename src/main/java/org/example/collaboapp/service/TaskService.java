@@ -13,7 +13,7 @@ public interface TaskService {
 
     ListResponseDto getAllTasks(int page, int size);
 
-    ListResponseDto getTasksByProjectId(int projectId, int page, int size, Integer status);
+    ListResponseDto getTasksByProjectId(int projectId, int page, int size, Integer status,String sort, Integer desc);
 
     TaskResponseDto getTaskById(int id);
 

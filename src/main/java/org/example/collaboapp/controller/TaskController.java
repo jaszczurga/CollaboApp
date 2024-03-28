@@ -35,8 +35,11 @@ public class TaskController {
     @GetMapping("/tasks")
     public ResponseEntity<?> getTasksByProjectId(@PathVariable int id,
                                                           @RequestParam(defaultValue = "0",required = false) int page,
-                                                          @RequestParam(defaultValue = "100",required = false) int size,@RequestParam(required = false) Integer status) {
-        return ResponseEntity.ok(taskService.getTasksByProjectId(id, page, size,status));
+                                                          @RequestParam(defaultValue = "100",required = false) int size,
+                                                          @RequestParam(required = false) Integer status,
+                                                          @RequestParam(required = false) String sort,
+                                                          @RequestParam(required = false) Integer desc) {
+        return ResponseEntity.ok(taskService.getTasksByProjectId(id, page, size,status,sort,desc));
     }
 
     @GetMapping("/tasks/{taskId}")
