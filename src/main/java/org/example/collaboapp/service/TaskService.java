@@ -13,6 +13,8 @@ public interface TaskService {
 
     ListResponseDto getAllTasks(int page, int size);
 
+    ListResponseDto getTasksByProjectId(int projectId, int page, int size, Integer status);
+
     TaskResponseDto getTaskById(int id);
 
     TaskResponseDto updateTask(int id, TaskRequestDto taskRequestDto);

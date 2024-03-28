@@ -25,11 +25,18 @@ public class TaskController {
     private final EntityMapper entityMapper;
     private final UserRepository userRepository;
 
-    @GetMapping("/tasks")
+    @GetMapping("/alltasks")
     public ResponseEntity<?> getTasks(@PathVariable int id,
                                                           @RequestParam(defaultValue = "0",required = false) int page,
                                                           @RequestParam(defaultValue = "100",required = false) int size) {
         return ResponseEntity.ok(taskService.getAllTasks(page, size));
+    }
+
+    @GetMapping("/tasks")
+    public ResponseEntity<?> getTasksByProjectId(@PathVariable int id,
+                                                          @RequestParam(defaultValue = "0",required = false) int page,
+                                                          @RequestParam(defaultValue = "100",required = false) int size,@RequestParam(required = false) Integer status) {
+        return ResponseEntity.ok(taskService.getTasksByProjectId(id, page, size,status));
     }
 
     @GetMapping("/tasks/{taskId}")

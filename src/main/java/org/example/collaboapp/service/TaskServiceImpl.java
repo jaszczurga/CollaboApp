@@ -62,6 +62,29 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
+    public ListResponseDto getTasksByProjectId(int projectId , int page , int size , Integer status) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        //filtering of statuses 0 => _TODO, 1 => IN_PROGRESS, 2 => DONE
+        Status statusValue = status != null ? Status.values()[status] : null;
+
+        List<Task> tasks = taskRepository.findAllByProjectId(projectId,statusValue,pageable).getContent();
+        List resultTasks =  tasks.stream()
+                .map(entityMapper::taskToTaskResponseDto)
+                .peek(taskResponseDto -> {
+                    Link selfLink = linkTo(methodOn( TaskController.class).getTask(taskResponseDto.getProjectId(),taskResponseDto.getTaskId())).withSelfRel();
+                    taskResponseDto.add(selfLink);
+                })
+                .toList();
+        ListResponseDto listResponseDto = new ListResponseDto();
+        listResponseDto.setContent(resultTasks);
+        Link selfLink = linkTo(methodOn( TaskController.class).getTasks(projectId,0,100)).withSelfRel();
+        Link addTask = linkTo(methodOn( TaskController.class).saveTask(projectId,null)).withRel("addTask").withTitle("Endpoint for adding task");
+        listResponseDto.add(selfLink,addTask);
+        return listResponseDto;
+    }
+
+    @Override
     public TaskResponseDto getTaskById(int id) {
         Task task = taskRepository.findById((long)id)
                 .orElseThrow(() -> new NotFoundException("task not found with given id"));

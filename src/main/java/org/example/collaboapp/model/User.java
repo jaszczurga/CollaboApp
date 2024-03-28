@@ -53,6 +53,11 @@ public class User implements UserDetails {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+    }
+
     @ManyToMany
     @JoinTable(
             name = "user_roles",
